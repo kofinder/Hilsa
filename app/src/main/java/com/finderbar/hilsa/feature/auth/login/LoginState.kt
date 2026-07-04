@@ -8,6 +8,7 @@ package com.finderbar.hilsa.feature.auth.login
 data class LoginState(
     val username: String = "",
     val password: String = "",
+    val rememberMe: Boolean = true,
     val isLoading: Boolean = false,
     val isPasswordVisible: Boolean = false,
     val usernameError: String? = null,

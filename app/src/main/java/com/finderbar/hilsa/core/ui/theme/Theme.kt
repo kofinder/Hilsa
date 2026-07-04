@@ -16,42 +16,64 @@ import com.finderbar.hilsa.core.ui.resources.LocalDimensions
 import com.finderbar.hilsa.core.ui.resources.LocalSpacing
 import com.finderbar.hilsa.core.ui.resources.Spacing
 
+/**
+ * Supported theme types for the application.
+ */
 enum class AppTheme {
     DARK, WHITE, ORANGE, BLUE
 }
 
 private val DarkColorScheme = darkColorScheme(
     primary = DarkPrimary,
+    onPrimary = Color.Black,
     secondary = PurpleGrey80,
     tertiary = Pink80,
     background = DarkBackground,
-    surface = DarkSurface
+    onBackground = Color.White,
+    surface = DarkSurface,
+    onSurface = Color.White
 )
 
 private val WhiteColorScheme = lightColorScheme(
     primary = WhitePrimary,
+    onPrimary = Color.White,
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = WhiteBackground,
-    surface = WhiteSurface
+    onBackground = Color.Black,
+    surface = WhiteSurface,
+    onSurface = Color.Black
 )
 
 private val OrangeColorScheme = lightColorScheme(
     primary = OrangePrimary,
+    onPrimary = Color.White,
     secondary = OrangeSecondary,
     tertiary = OrangeTertiary,
     background = Color(0xFFFFF8E1),
-    surface = Color(0xFFFFFDE7)
+    onBackground = Color.Black,
+    surface = Color(0xFFFFFDE7),
+    onSurface = Color.Black
 )
 
 private val BlueColorScheme = lightColorScheme(
     primary = EnterpriseBlue,
+    onPrimary = Color.White,
     secondary = EnterpriseBlueSecondary,
+    onSecondary = Color.White,
     tertiary = EnterpriseBlueLight,
-    background = Color(0xFFE3F2FD),
-    surface = Color(0xFFF1F8E9)
+    onTertiary = Color.White,
+    background = Color.White,
+    onBackground = Color.Black,
+    surface = Color.White,
+    onSurface = Color.Black,
+    primaryContainer = Color(0xFFE3F2FD),
+    onPrimaryContainer = EnterpriseBlue
 )
 
+/**
+ * Accessor for the application's custom design system tokens (Spacing, Dimensions).
+ */
 object AppDesignSystem {
     val spacing: Spacing
         @Composable
@@ -62,6 +84,10 @@ object AppDesignSystem {
         get() = LocalDimensions.current
 }
 
+/**
+ * The root theme for the Hilsa application.
+ * Configures Material 3 color schemes, typography, and custom design tokens.
+ */
 @Composable
 fun HilsaTheme(
     themeType: AppTheme = if (isSystemInDarkTheme()) AppTheme.DARK else AppTheme.BLUE,

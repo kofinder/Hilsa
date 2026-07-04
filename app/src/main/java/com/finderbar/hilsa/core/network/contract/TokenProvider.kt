@@ -1,19 +1,17 @@
 package com.finderbar.hilsa.core.network.contract
 
 /**
- * Author: Ko Thein (Nathan Mratt)
- * Created: 7/4/2026
- * Project: Hilsa
+ * Interface for providing and managing authentication tokens.
  */
-interface  TokenProvider {
+interface TokenProvider {
     /**
-     * Returns current access token.
-     * Can be null if user is not logged in.
+     * Retrieves the current access token.
+     * @return The token string if available, null otherwise.
      */
     suspend fun getToken(): String?
 
     /**
-     * Optional: Clear token on logout or auth failure.
+     * Clears the stored authentication token.
      */
     suspend fun clearToken()
 }

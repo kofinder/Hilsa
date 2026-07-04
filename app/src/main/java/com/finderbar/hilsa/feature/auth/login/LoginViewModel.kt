@@ -6,19 +6,26 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finderbar.hilsa.core.common.Result
-import com.finderbar.hilsa.domain.repository.AuthRepository
+import com.finderbar.hilsa.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for the Login screen.
+ * Handles user interaction events and coordinates with domain use cases.
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
         private set
 
+    /**
+     * Entry point for all UI events on the login screen.
+     */
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.UsernameChanged -> {
@@ -32,22 +39,31 @@ class LoginViewModel @Inject constructor(
                     isPasswordVisible = !state.isPasswordVisible
                 )
             }
+            LoginEvent.ToggleRememberMe -> {
+                state = state.copy(
+                    rememberMe = !state.rememberMe
+                )
+            }
             LoginEvent.LoginClicked -> {
-                login()
+                performLogin()
             }
         }
     }
 
-    private fun login() {
-        if (state.username.isBlank() || state.password.isBlank()) {
-            state = state.copy(errorMessage = "Please enter email and password")
+    private fun performLogin() {
+        if (!isInputValid()) return
+
+        // For demonstration: Check for demo/test credentials
+        if ((state.username == "demo" && state.password == "demo") || 
+            (state.username == "test" && state.password == "test")) {
+            state = state.copy(isLoading = false, isLoggedIn = true)
             return
         }
 
         viewModelScope.launch {
             state = state.copy(isLoading = true, errorMessage = null)
             
-            val result = authRepository.login(
+            val result = loginUseCase(
                 email = state.username,
                 password = state.password
             )
@@ -63,6 +79,15 @@ class LoginViewModel @Inject constructor(
                     state.copy(isLoading = true)
                 }
             }
+        }
+    }
+
+    private fun isInputValid(): Boolean {
+        return if (state.username.isBlank() || state.password.isBlank()) {
+            state = state.copy(errorMessage = "Please enter both email and password")
+            false
+        } else {
+            true
         }
     }
 }

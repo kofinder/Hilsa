@@ -4,40 +4,90 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.finderbar.hilsa.app.MainScreen
 import com.finderbar.hilsa.feature.auth.LoginRoute
-import com.finderbar.hilsa.feature.home.HomeScreen
+import com.finderbar.hilsa.feature.auth.login.BranchSelectionScreen
+import com.finderbar.hilsa.feature.auth.login.CompanySelectionScreen
+import com.finderbar.hilsa.feature.auth.login.DepartmentSelectionScreen
+import com.finderbar.hilsa.feature.auth.login.PositionSelectionScreen
 
-/**
- * Author: Ko Thein (Nathan Mratt)
- * Created: 7/4/2026
- * Project: Hilsa
- */
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-
     NavHost(
         navController = navController,
-        startDestination = Routes.LOGIN
+        startDestination = Routes.AUTH_GRAPH
     ) {
-
-        composable(Routes.LOGIN) {
-            LoginRoute(
-                onLoginSuccess = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
+        navigation(
+            startDestination = Routes.LOGIN,
+            route = Routes.AUTH_GRAPH
+        ) {
+            composable(Routes.LOGIN) {
+                LoginRoute(
+                    onLoginSuccess = {
+                        navController.navigate(Routes.COMPANY_SELECTION)
                     }
-                }
-            )
+                )
+            }
+            
+            composable(Routes.COMPANY_SELECTION) {
+                CompanySelectionScreen(
+                    onBack = { navController.popBackStack() },
+                    onCompanySelected = { company ->
+                        navController.navigate("${Routes.BRANCH_SELECTION}/$company")
+                    }
+                )
+            }
+            
+            composable("${Routes.BRANCH_SELECTION}/{companyName}") { backStackEntry ->
+                val companyName = backStackEntry.arguments?.getString("companyName") ?: ""
+                BranchSelectionScreen(
+                    onBack = { navController.popBackStack() },
+                    companyName = companyName,
+                    onBranchSelected = { branch ->
+                        navController.navigate("${Routes.DEPARTMENT_SELECTION}/$branch")
+                    }
+                )
+            }
+
+            composable("${Routes.DEPARTMENT_SELECTION}/{branchName}") { backStackEntry ->
+                val branchName = backStackEntry.arguments?.getString("branchName") ?: ""
+                DepartmentSelectionScreen(
+                    onBack = { navController.popBackStack() },
+                    branchName = branchName,
+                    onDepartmentSelected = { dept ->
+                        navController.navigate("${Routes.POSITION_SELECTION}/$dept")
+                    }
+                )
+            }
+
+            composable("${Routes.POSITION_SELECTION}/{deptName}") { backStackEntry ->
+                val deptName = backStackEntry.arguments?.getString("deptName") ?: ""
+                PositionSelectionScreen(
+                    onBack = { navController.popBackStack() },
+                    departmentName = deptName,
+                    onPositionSelected = {
+                        navController.navigate(Routes.MAIN_GRAPH) {
+                            popUpTo(Routes.AUTH_GRAPH) { inclusive = true }
+                        }
+                    }
+                )
+            }
         }
 
-        composable(Routes.HOME) {
-            HomeScreen(
-                onLogout = {
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.HOME) { inclusive = true }
+        navigation(
+            startDestination = Routes.HOME,
+            route = Routes.MAIN_GRAPH
+        ) {
+            composable(Routes.HOME) {
+                MainScreen(
+                    onLogout = {
+                        navController.navigate(Routes.AUTH_GRAPH) {
+                            popUpTo(Routes.MAIN_GRAPH) { inclusive = true }
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

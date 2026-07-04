@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * An implementation of [TokenProvider] that retrieves the JWT token from the local Room database.
+ */
 @Singleton
 class RoomTokenProvider @Inject constructor(
     private val userDao: UserDao

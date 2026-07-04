@@ -5,8 +5,17 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 
+/**
+ * A utility object to safely execute network requests and catch common exceptions.
+ */
 object SafeApiCall {
 
+    /**
+     * Executes a suspendable network call and wraps the result in a [Result].
+     *
+     * @param apiCall The suspendable network request block.
+     * @return [Result.Success] if the call succeeds, or [Result.Error] if an exception occurs.
+     */
     suspend fun <T> execute(
         apiCall: suspend () -> T
     ): Result<T> {

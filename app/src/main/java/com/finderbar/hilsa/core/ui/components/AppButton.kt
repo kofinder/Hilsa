@@ -1,19 +1,28 @@
 package com.finderbar.hilsa.core.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.finderbar.hilsa.core.ui.theme.AppDesignSystem
 
+/**
+ * A custom enterprise-styled button.
+ * Supports a loading state with a circular progress indicator.
+ */
 @Composable
 fun AppButton(
     text: String,
@@ -22,7 +31,9 @@ fun AppButton(
     enabled: Boolean = true,
     isLoading: Boolean = false,
     containerColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     Button(
         onClick = onClick,
@@ -43,10 +54,23 @@ fun AppButton(
                 strokeWidth = 2.dp
             )
         } else {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelLarge
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (leadingIcon != null) {
+                    leadingIcon()
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.labelLarge
+                )
+                if (trailingIcon != null) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    trailingIcon()
+                }
+            }
         }
     }
 }

@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.VisualTransformation
 import com.finderbar.hilsa.core.ui.theme.AppDesignSystem
 
+/**
+ * A custom enterprise-styled text field with error support.
+ */
 @Composable
 fun AppTextField(
     value: String,
