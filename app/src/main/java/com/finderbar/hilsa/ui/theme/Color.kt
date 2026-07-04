@@ -2,6 +2,7 @@ package com.finderbar.hilsa.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Default Material 3 colors
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
@@ -9,3 +10,24 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+// Blue (Enterprise) Theme Colors
+val EnterpriseBlue = Color(0xFF0D47A1)
+val EnterpriseBlueLight = Color(0xFF5472D3)
+val EnterpriseBlueDark = Color(0xFF002171)
+val EnterpriseBlueSecondary = Color(0xFF263238)
+
+// Orange Theme Colors
+val OrangePrimary = Color(0xFFFF9800)
+val OrangeSecondary = Color(0xFFF57C00)
+val OrangeTertiary = Color(0xFFFFB74D)
+
+// Dark Theme Colors (Refined)
+val DarkBackground = Color(0xFF121212)
+val DarkSurface = Color(0xFF1E1E1E)
+val DarkPrimary = Color(0xFFBB86FC)
+
+// White (Light) Theme Colors
+val WhiteBackground = Color(0xFFFFFFFF)
+val WhiteSurface = Color(0xFFF5F5F5)
+val WhitePrimary = Color(0xFF6200EE)
