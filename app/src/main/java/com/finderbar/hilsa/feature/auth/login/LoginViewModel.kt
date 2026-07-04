@@ -5,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.finderbar.hilsa.core.network.call.ApiResult
-import com.finderbar.hilsa.core.network.model.LoginRequest
-import com.finderbar.hilsa.feature.auth.repository.AuthRepository
+import com.finderbar.hilsa.core.common.Result
+import com.finderbar.hilsa.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,23 +20,18 @@ class LoginViewModel @Inject constructor(
         private set
 
     fun onEvent(event: LoginEvent) {
-
         when (event) {
-
             is LoginEvent.UsernameChanged -> {
                 state = state.copy(username = event.value)
             }
-
             is LoginEvent.PasswordChanged -> {
                 state = state.copy(password = event.value)
             }
-
             LoginEvent.TogglePasswordVisibility -> {
                 state = state.copy(
                     isPasswordVisible = !state.isPasswordVisible
                 )
             }
-
             LoginEvent.LoginClicked -> {
                 login()
             }
@@ -54,20 +48,18 @@ class LoginViewModel @Inject constructor(
             state = state.copy(isLoading = true, errorMessage = null)
             
             val result = authRepository.login(
-                LoginRequest(
-                    email = state.username,
-                    password = state.password
-                )
+                email = state.username,
+                password = state.password
             )
 
             state = when (result) {
-                is ApiResult.Success -> {
+                is Result.Success -> {
                     state.copy(isLoading = false, isLoggedIn = true)
                 }
-                is ApiResult.Error -> {
+                is Result.Error -> {
                     state.copy(isLoading = false, errorMessage = result.exception.message)
                 }
-                ApiResult.Loading -> {
+                Result.Loading -> {
                     state.copy(isLoading = true)
                 }
             }
